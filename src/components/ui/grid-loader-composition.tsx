@@ -11,12 +11,14 @@ import {
   spring,
 } from "remotion";
 
+import { hexToRgb } from "@/lib/color";
+
 // === LAYOUT ===
 const GRID_SIZE = 3;
 const CELL_SIZE = 126;
 const GAP = 21;
 const CELL_RADIUS = 21;
-const FILL_COLOR = "#8BE83B";
+const DEFAULT_FILL_COLOR = "#8BE83B";
 const STROKE_WIDTH = 2;
 const SOURCE_STROKE_WIDTH = 3;
 const SOURCE_PREFILL = 0.12;
@@ -93,7 +95,7 @@ const getKnockDir = (row: number, col: number) => {
 };
 
 // === PULSE RING ===
-const PulseRing: React.FC<{ frame: number }> = ({ frame }) => {
+const PulseRing: React.FC<{ frame: number; fillColor: string }> = ({ frame, fillColor }) => {
   const progress = interpolate(
     frame,
     [PULSE_START, PULSE_START + PULSE_DURATION + 24],
@@ -114,7 +116,7 @@ const PulseRing: React.FC<{ frame: number }> = ({ frame }) => {
         width: size,
         height: size,
         borderRadius: "50%",
-        border: `${borderW}px solid ${FILL_COLOR}`,
+        border: `${borderW}px solid ${fillColor}`,
         opacity,
         left: CELL_SIZE / 2,
         top: CELL_SIZE / 2,
@@ -126,8 +128,8 @@ const PulseRing: React.FC<{ frame: number }> = ({ frame }) => {
 };
 
 // === CELL ===
-const Cell: React.FC<{ pos: CellPos; frame: number; fps: number; mergeProgress: number }> = ({
-  pos, frame, fps, mergeProgress,
+const Cell: React.FC<{ pos: CellPos; frame: number; fps: number; mergeProgress: number; fillColor: string }> = ({
+  pos, frame, fps, mergeProgress, fillColor,
 }) => {
   const { row, col } = pos;
   const center = isCenterCell(row, col);
@@ -265,10 +267,11 @@ const Cell: React.FC<{ pos: CellPos; frame: number; fps: number; mergeProgress: 
   const totalScale = entranceScale * fillPop;
 
   const glowOpacity = bgOpacity * (1 + gapClose * 0.5);
+  const { r, g, b } = hexToRgb(fillColor);
   const glow = [
-    `0 0 ${8 + gapClose * 6}px rgba(139, 232, 59, ${0.4 * glowOpacity})`,
-    `0 0 ${16 + gapClose * 12}px rgba(139, 232, 59, ${0.2 * glowOpacity})`,
-    `0 0 ${30 + gapClose * 20}px rgba(139, 232, 59, ${0.1 * glowOpacity})`,
+    `0 0 ${8 + gapClose * 6}px rgba(${r}, ${g}, ${b}, ${0.4 * glowOpacity})`,
+    `0 0 ${16 + gapClose * 12}px rgba(${r}, ${g}, ${b}, ${0.2 * glowOpacity})`,
+    `0 0 ${30 + gapClose * 20}px rgba(${r}, ${g}, ${b}, ${0.1 * glowOpacity})`,
   ].join(", ");
 
   return (
@@ -278,11 +281,11 @@ const Cell: React.FC<{ pos: CellPos; frame: number; fps: number; mergeProgress: 
         width: cellWidth,
         height: cellHeight,
         borderRadius: `${tl}px ${tr}px ${br}px ${bl}px`,
-        borderTop: `${borderTop}px solid ${FILL_COLOR}`,
-        borderBottom: `${borderBottom}px solid ${FILL_COLOR}`,
-        borderLeft: `${borderLeft}px solid ${FILL_COLOR}`,
-        borderRight: `${borderRight}px solid ${FILL_COLOR}`,
-        backgroundColor: `rgba(139, 232, 59, ${bgOpacity})`,
+        borderTop: `${borderTop}px solid ${fillColor}`,
+        borderBottom: `${borderBottom}px solid ${fillColor}`,
+        borderLeft: `${borderLeft}px solid ${fillColor}`,
+        borderRight: `${borderRight}px solid ${fillColor}`,
+        backgroundColor: `rgba(${r}, ${g}, ${b}, ${bgOpacity})`,
         boxShadow: glow,
         transform: `translate(${totalX}px, ${totalY}px) scale(${totalScale}) rotate(${entranceRot}deg)`,
         transformOrigin: "center center",
@@ -294,7 +297,7 @@ const Cell: React.FC<{ pos: CellPos; frame: number; fps: number; mergeProgress: 
 };
 
 // === MAIN ===
-const GridLoaderInner: React.FC = () => {
+const GridLoaderInner: React.FC<{ fillColor: string }> = ({ fillColor }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -354,7 +357,7 @@ const GridLoaderInner: React.FC = () => {
           opacity: exitOpacity,
         }}
       >
-        <PulseRing frame={frame} />
+        <PulseRing frame={frame} fillColor={fillColor} />
         {cells.map((pos) => (
           <Cell
             key={`${pos.row}-${pos.col}`}
@@ -362,6 +365,7 @@ const GridLoaderInner: React.FC = () => {
             frame={frame}
             fps={fps}
             mergeProgress={mergeProgress}
+            fillColor={fillColor}
           />
         ))}
       </div>
@@ -369,10 +373,12 @@ const GridLoaderInner: React.FC = () => {
   );
 };
 
-export const GridLoaderComposition: React.FC = () => {
+export const GridLoaderComposition: React.FC<{ fillColor?: string }> = ({
+  fillColor = DEFAULT_FILL_COLOR,
+}) => {
   return (
     <Loop durationInFrames={TOTAL_FRAMES}>
-      <GridLoaderInner />
+      <GridLoaderInner fillColor={fillColor} />
     </Loop>
   );
 };

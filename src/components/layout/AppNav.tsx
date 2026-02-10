@@ -6,6 +6,7 @@ import { KeyRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApiKeyStore } from "@/store/api-key-store";
 import { ApiKeyDialog } from "@/components/settings/ApiKeyDialog";
+import { AccentColorPicker } from "@/components/settings/AccentColorPicker";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -39,13 +40,14 @@ export function AppNav() {
             </Link>
           ))}
         </div>
-        <ApiKeyDialog
-          trigger={
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "ml-auto gap-1.5",
+        <div className="ml-auto flex items-center gap-2">
+          <ApiKeyDialog
+            trigger={
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn(
+                  "gap-1.5",
                 hasKey
                   ? "border-primary/40 text-primary hover:text-primary hover:border-primary/60"
                   : "border-muted-foreground/30 text-muted-foreground hover:text-foreground hover:border-muted-foreground/50"
@@ -61,7 +63,9 @@ export function AppNav() {
               <span className="hidden sm:inline">{hasKey ? "API Key Active" : "Add API Key"}</span>
             </Button>
           }
-        />
+          />
+          <AccentColorPicker />
+        </div>
       </div>
     </nav>
   );

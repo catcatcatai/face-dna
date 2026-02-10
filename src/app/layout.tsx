@@ -22,6 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=JSON.parse(localStorage.getItem("onset-accent"));if(s&&s.state){var e=document.documentElement.style,h=s.state.hue,c=s.state.chroma;if(h!=null)e.setProperty("--accent-hue",h);if(c!=null){e.setProperty("--accent-chroma",c);e.setProperty("--accent-chroma-dim",c*0.05/0.19)}}}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body
         className={`${robotoMono.variable} antialiased`}
       >
