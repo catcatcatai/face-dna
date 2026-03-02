@@ -2,6 +2,9 @@
 
 Train a face LoRA from a single photo. Onset bootstraps a complete training dataset — expressions, angles, outfits, lighting — from one reference image, then trains a LoRA model via fal.ai.
 
+<img width="1040" height="770" alt="4" src="https://github.com/user-attachments/assets/7172006c-ed8c-48f8-b45d-cc7ce092c86a" />
+
+
 ## Features
 
 - **One-photo dataset** — upload a single face image, get 36-54 curated training images across 4-6 variation rounds
