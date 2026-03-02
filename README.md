@@ -10,7 +10,6 @@ Train a face LoRA from a single photo. Onset bootstraps a complete training data
 - **Configurable** — 2K or 4K generation resolution, 4 or 6 rounds, cost estimate upfront
 - **LoRA training** — bundles your curated dataset and submits to fal.ai Flux LoRA training
 - **Profile library** — saved LoRAs with trigger words, downloadable weights, hover image previews
-- **Mock mode** — `?mock=true` on any page for design iteration without API calls
 
 ## Quick Start
 
