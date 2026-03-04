@@ -15,7 +15,7 @@ export const useApiKeyStore = create<ApiKeyState>()(
       clearFalApiKey: () => set({ falApiKey: null }),
     }),
     {
-      name: "onset-api-key",
+      name: "face-dna-api-key",
     }
   )
 );

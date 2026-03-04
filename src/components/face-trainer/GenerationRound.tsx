@@ -5,7 +5,7 @@ import { useTrainerStore } from "@/store/trainer-store";
 import { ROUND_CONFIGS } from "@/types";
 import { Button } from "@/components/ui/button";
 import { ImageGrid } from "./ImageGrid";
-import { Loader2, RefreshCw, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, RefreshCw, ArrowRight, Loader2 } from "lucide-react";
 import { GridLoader2 } from "@/components/ui/grid-loader2";
 import { toast } from "sonner";
 
@@ -35,20 +35,18 @@ function ShimmerCell({ resolved, index }: { resolved: boolean; index: number }) 
     <div
       className={`relative aspect-square overflow-hidden rounded-lg transition-all duration-700 ${
         resolved
-          ? "bg-muted/80 ring-2 ring-primary/50 shadow-[var(--glow-primary)]"
-          : "bg-muted/40"
+          ? "bg-[var(--surface-2)] border-2 border-[var(--cat-accent)]"
+          : "bg-[var(--surface-2)]/40"
       }`}
       style={{ transitionDelay: `${index * 50}ms` }}
     >
       {!resolved && (
-        <div
-          className="absolute inset-0 bg-muted"
-        >
+        <div className="absolute inset-0 bg-[var(--surface-2)]">
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(110deg, transparent 30%, oklch(0.82 var(--accent-chroma, 0.19) var(--accent-hue, 130) / 18%) 50%, transparent 70%)",
+                "linear-gradient(110deg, transparent 30%, rgba(0,0,0,0.04) 50%, transparent 70%)",
               backgroundSize: "200% 100%",
               animation: "shimmer-sweep 1.8s ease-in-out infinite",
               animationDelay: `${index * 150}ms`,
@@ -57,8 +55,8 @@ function ShimmerCell({ resolved, index }: { resolved: boolean; index: number }) 
         </div>
       )}
       {resolved && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/60">
-          <span className="text-xs font-medium text-muted-foreground/50">
+        <div className="absolute inset-0 flex items-center justify-center bg-[var(--surface)]">
+          <span className="text-xs font-medium text-[var(--text-dim)]/50">
             {index + 1}
           </span>
         </div>
@@ -73,18 +71,24 @@ export function GenerationRound() {
   const isGenerating = useTrainerStore((s) => s.isGenerating);
   const generationError = useTrainerStore((s) => s.generationError);
   const generateRound = useTrainerStore((s) => s.generateRound);
-  const regenerateRound = useTrainerStore((s) => s.regenerateRound);
   const toggleImageSelection = useTrainerStore((s) => s.toggleImageSelection);
-  const confirmRound = useTrainerStore((s) => s.confirmRound);
-  const getSelectedCount = useTrainerStore((s) => s.getSelectedCount);
   const roundCount = useTrainerStore((s) => s.roundCount);
+  const regenerateRound = useTrainerStore((s) => s.regenerateRound);
+  const confirmRound = useTrainerStore((s) => s.confirmRound);
 
-  const revealed = useProgressiveReveal(isGenerating);
   const [isConfirming, setIsConfirming] = useState(false);
+  const revealed = useProgressiveReveal(isGenerating);
 
   const currentGrid = gridResults[currentRoundIndex];
   const roundConfig = ROUND_CONFIGS[currentRoundIndex];
-  const totalSelected = getSelectedCount();
+  const selectedInRound = currentGrid?.croppedImages.filter((img) => img.selected).length ?? 0;
+  const totalInRound = currentGrid?.croppedImages.length ?? 9;
+
+  // Total selected across all rounds
+  const totalSelected = gridResults.reduce((sum, grid) => {
+    if (!grid) return sum;
+    return sum + grid.croppedImages.filter((img) => img.selected).length;
+  }, 0);
 
   // Auto-generate when entering a new round with no results
   useEffect(() => {
@@ -94,18 +98,14 @@ export function GenerationRound() {
   }, [currentRoundIndex, currentGrid, isGenerating, generationError, generateRound]);
 
   const handleConfirm = async () => {
-    const selectedInRound =
-      currentGrid?.croppedImages.filter((img) => img.selected).length ?? 0;
-
     if (selectedInRound === 0) {
       toast.error("Select at least one image to continue");
       return;
     }
-
     setIsConfirming(true);
     try {
       await confirmRound();
-    } catch (error) {
+    } catch {
       toast.error("Failed to save selections");
     } finally {
       setIsConfirming(false);
@@ -115,112 +115,74 @@ export function GenerationRound() {
   const handleRegenerate = async () => {
     try {
       await regenerateRound();
-    } catch (error) {
+    } catch {
       toast.error("Regeneration failed");
     }
   };
 
-  // Check if user has eliminated too many
-  const currentSelectedCount =
-    currentGrid?.croppedImages.filter((img) => img.selected).length ?? 0;
-  const currentTotalCount = currentGrid?.croppedImages.length ?? 9;
-  const tooManyEliminated =
-    currentGrid && currentSelectedCount < currentTotalCount * 0.5;
-
   return (
-    <div className="flex gap-6">
-      {/* Left sidebar — round info & controls */}
-      <div className="w-56 shrink-0 space-y-5">
-        <div>
-          <h2 className="text-lg font-bold tracking-tight">{roundConfig?.label}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">{roundConfig?.description}</p>
+    <div className="flex gap-8">
+      {/* Left sidebar: round info + navigation */}
+      <div className="w-[220px] shrink-0 space-y-5">
+        <div className="space-y-1">
+          <h2 className="text-[13px] font-semibold tracking-[0.06em]">
+            {roundConfig?.label}
+          </h2>
+          <p className="text-[11px] text-[var(--text-dim)]">
+            {roundConfig?.description}
+          </p>
         </div>
 
-        {/* Vertical progress */}
-        <div className="space-y-1.5">
-          {ROUND_CONFIGS.slice(0, roundCount).map((round, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className={`h-7 w-1 rounded-full transition-all ${
-                i < currentRoundIndex
-                  ? "bg-primary"
-                  : i === currentRoundIndex
-                    ? "bg-primary shadow-[var(--glow-primary)]"
-                    : "bg-muted"
-              }`} />
-              <span className={`text-xs ${
+        {/* Round navigation */}
+        <div className="space-y-0.5">
+          {ROUND_CONFIGS.slice(0, roundCount).map((config, i) => (
+            <div
+              key={config.type}
+              className={`py-1.5 text-[11px] transition-all duration-[200ms] ${
                 i === currentRoundIndex
-                  ? "font-semibold text-foreground"
+                  ? "border-l-2 border-[var(--cat-accent)] pl-3 font-semibold text-[var(--text)]"
                   : i < currentRoundIndex
-                    ? "text-muted-foreground"
-                    : "text-muted-foreground/60"
-              }`}>
-                {round.label.split(": ")[1]}
-              </span>
+                    ? "border-l-2 border-[var(--cat-border)] pl-3 text-[var(--text-dim)]"
+                    : "border-l-2 border-transparent pl-3 text-[var(--text-dim)]/50"
+              }`}
+            >
+              {config.label.split(": ")[1] || config.label}
             </div>
           ))}
         </div>
 
-        <div className="rounded-lg border border-border/50 bg-muted/30 p-3 text-xs tabular-nums">
-          <span className="text-muted-foreground">Selected:</span>{" "}
-          <strong>{totalSelected} images</strong>
+        {/* Selection count */}
+        <div className="rounded-lg border border-[var(--cat-border)] bg-[var(--surface)] px-3 py-2 text-[11px]">
+          Selected: <span className="font-semibold">{totalSelected} images</span>
         </div>
 
+        {/* Actions */}
         {currentGrid && !isGenerating && (
-          <>
-            {tooManyEliminated && (
-              <div className="rounded-lg border border-yellow-500/50 bg-yellow-500/10 p-3 text-xs text-yellow-200">
-                Having trouble? Regenerate for fresh results.
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={handleRegenerate}
-                disabled={isGenerating}
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Regenerate
-              </Button>
-              <Button
-                className="w-full"
-                onClick={handleConfirm}
-                disabled={isConfirming || currentSelectedCount === 0}
-              >
-                {isConfirming ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : currentRoundIndex < roundCount - 1 ? (
-                  <>
-                    Next Round
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                ) : (
-                  <>
-                    Review All
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </div>
-          </>
+          <div className="flex flex-col gap-2">
+            <Button variant="outline" size="sm" className="w-full" onClick={handleRegenerate}>
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
+              Regenerate
+            </Button>
+            <Button size="sm" className="w-full" onClick={handleConfirm} disabled={isConfirming || selectedInRound === 0}>
+              {isConfirming ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : null}
+              {currentRoundIndex < roundCount - 1 ? "Next Round" : "Review All"}
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Button>
+          </div>
         )}
       </div>
 
-      {/* Right: Grid canvas */}
-      <div className="flex-1">
-        {/* Loading state — progressive reveal grid */}
+      {/* Right: grid content */}
+      <div className="flex-1 space-y-4">
+        {/* Loading state */}
         {isGenerating && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <GridLoader2 size={20} />
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[11px] text-[var(--text-dim)]">
                   Generating{" "}
-                  <span className="tabular-nums font-semibold text-foreground">
+                  <span className="tabular-nums font-semibold text-[var(--text)]">
                     {revealed}
                   </span>{" "}
                   of {TOTAL_CELLS}
@@ -228,8 +190,8 @@ export function GenerationRound() {
               </div>
               {revealed < TOTAL_CELLS && (
                 <div className="flex items-center gap-2">
-                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-                  <span className="text-xs text-muted-foreground">Processing</span>
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--cat-accent)]" />
+                  <span className="text-[10px] text-[var(--text-dim)]">Processing</span>
                 </div>
               )}
             </div>
@@ -246,26 +208,28 @@ export function GenerationRound() {
           <div className="flex flex-col items-center gap-4 py-16">
             <AlertCircle className="h-10 w-10 text-destructive" />
             <div className="text-center">
-              <p className="font-medium">Generation failed</p>
-              <p className="text-sm text-muted-foreground">{generationError}</p>
+              <p className="text-[13px] font-medium">Generation failed</p>
+              <p className="text-[11px] text-[var(--text-dim)]">{generationError}</p>
             </div>
             <Button onClick={() => generateRound()}>Try Again</Button>
           </div>
         )}
 
-        {/* Grid display */}
+        {/* Grid display with inline controls */}
         {currentGrid && !isGenerating && (
           <div className="space-y-4">
+            <div className="flex items-center justify-between text-[11px] text-[var(--text-dim)]">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[var(--cat-accent)]" />
+                <span>{selectedInRound}/{totalInRound} selected — tap to deselect</span>
+              </div>
+            </div>
             <ImageGrid
               images={currentGrid.croppedImages}
               onToggle={(imageId) =>
                 toggleImageSelection(currentRoundIndex, imageId)
               }
             />
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="h-4 w-4 text-primary" />
-              <span>{roundConfig?.label.split(": ")[1]} generated — tap to deselect</span>
-            </div>
           </div>
         )}
       </div>

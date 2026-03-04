@@ -12,7 +12,7 @@ export function PageLoader() {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className="h-1.5 w-1.5 rounded-full bg-primary"
+            className="h-1.5 w-1.5 rounded-full bg-[var(--text)]"
             style={{
               animation: "pulse 1s ease-in-out infinite",
               animationDelay: `${i * 150}ms`,

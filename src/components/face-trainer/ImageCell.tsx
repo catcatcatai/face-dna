@@ -17,7 +17,7 @@ export function ImageCell({ imageUrl, selected, onToggle }: ImageCellProps) {
       className={cn(
         "group relative aspect-square overflow-hidden rounded-lg border-2 transition-all",
         selected
-          ? "border-primary ring-2 ring-primary/50 shadow-[var(--glow-primary)]"
+          ? "border-primary"
           : "border-transparent opacity-50 grayscale-[80%]"
       )}
     >

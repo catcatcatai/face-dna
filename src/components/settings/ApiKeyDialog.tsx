@@ -54,7 +54,7 @@ export function ApiKeyDialog({ trigger }: ApiKeyDialogProps) {
     <Dialog open={open} onOpenChange={handleOpen}>
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon-xs" className="text-[#a8a7a2] hover:text-[var(--text-dim)]">
             <Settings className="size-4" />
           </Button>
         )}
@@ -63,13 +63,13 @@ export function ApiKeyDialog({ trigger }: ApiKeyDialogProps) {
         <DialogHeader>
           <DialogTitle>fal.ai API Key</DialogTitle>
           <DialogDescription>
-            Enter your fal.ai API key to use Onset. Your key is stored
+            Enter your fal.ai API key to use face-dna. Your key is stored
             locally in your browser and never sent to our servers.{" "}
             <a
               href="https://fal.ai/dashboard/keys"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline underline-offset-4 hover:text-primary/80"
+              className="text-[var(--text)] underline underline-offset-4 hover:text-[var(--text-dim)]"
             >
               Get a key
             </a>

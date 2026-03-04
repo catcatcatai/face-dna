@@ -31,7 +31,7 @@ export function RoundProgress({
               i < currentRound
                 ? "bg-primary"
                 : i === currentRound
-                  ? "bg-primary shadow-[var(--glow-primary)]"
+                  ? "bg-primary"
                   : "bg-muted"
             }`}
           />

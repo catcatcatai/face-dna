@@ -18,22 +18,22 @@ export function HowItWorksDialog() {
         <Button
           variant="ghost"
           size="icon-xs"
-          className="text-muted-foreground hover:text-foreground"
+          className="text-[#a8a7a2] hover:text-[var(--text-dim)]"
         >
           <CircleHelp className="size-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>How Onset works</DialogTitle>
+          <DialogTitle>How face-dna works</DialogTitle>
           <DialogDescription>
             Train a face LoRA from a single photo — no dataset required.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 text-sm text-muted-foreground">
+        <div className="space-y-4 text-[11px] text-[var(--text-dim)]" style={{ textTransform: "none" }}>
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">The problem</h3>
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">The problem</h3>
             <p>
               Training a face LoRA typically requires 20-50+ diverse photos of
               the same person — different angles, expressions, lighting, and
@@ -43,9 +43,9 @@ export function HowItWorksDialog() {
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">The solution</h3>
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">The solution</h3>
             <p>
-              Onset bootstraps an entire training dataset from a single
+              face-dna bootstraps an entire training dataset from a single
               reference image using fal.ai's NanoBanano model — currently
               the most accurate model for maintaining face consistency across
               generated variations.
@@ -53,7 +53,7 @@ export function HowItWorksDialog() {
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">
               3x3 grid generation
             </h3>
             <p>
@@ -66,7 +66,7 @@ export function HowItWorksDialog() {
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">
               Progressive variation
             </h3>
             <p>
@@ -79,8 +79,8 @@ export function HowItWorksDialog() {
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">Cost breakdown</h3>
-            <div className="rounded-md border border-border bg-muted/50 p-3 text-xs">
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">Cost breakdown</h3>
+            <div className="rounded-lg border border-[var(--cat-border)] bg-[var(--surface-2)] p-3 text-[10px]">
               <div className="grid grid-cols-2 gap-y-1">
                 <span>4 rounds at 2K:</span>
                 <span className="text-right">~$0.60</span>
@@ -88,9 +88,9 @@ export function HowItWorksDialog() {
                 <span className="text-right">~$1.20</span>
                 <span>LoRA training:</span>
                 <span className="text-right">~$2.00</span>
-                <div className="col-span-2 my-1 border-t border-border" />
-                <span className="font-medium text-foreground">Total (2K):</span>
-                <span className="text-right font-medium text-foreground">
+                <div className="col-span-2 my-1 border-t border-[var(--cat-border)]" />
+                <span className="font-semibold text-[var(--text)]">Total (2K):</span>
+                <span className="text-right font-semibold text-[var(--text)]">
                   ~$2.60
                 </span>
               </div>
@@ -98,7 +98,7 @@ export function HowItWorksDialog() {
           </section>
 
           <section className="space-y-1.5">
-            <h3 className="font-medium text-foreground">The result</h3>
+            <h3 className="text-[11px] font-semibold text-[var(--text)]">The result</h3>
             <p>
               A trained LoRA model you can use in any Flux-compatible pipeline
               with a simple trigger word. From one photo to a production-ready

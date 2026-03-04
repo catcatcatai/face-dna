@@ -10,18 +10,18 @@ export function ApiKeyPrompt() {
     <div className="flex min-h-[60vh] items-center justify-center">
       <Card className="max-w-md">
         <CardContent className="flex flex-col items-center gap-4 pt-6 text-center">
-          <div className="rounded-full bg-muted p-3">
-            <KeyRound className="size-6 text-muted-foreground" />
+          <div className="rounded-full bg-[var(--surface-2)] p-3">
+            <KeyRound className="size-6 text-[var(--text-dim)]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-lg font-semibold">API key required</h2>
-            <p className="text-sm text-muted-foreground">
-              Onset uses{" "}
+            <h2 className="text-[13px] font-semibold tracking-[0.06em]">API key required</h2>
+            <p className="text-[11px] text-[var(--text-dim)]">
+              face-dna uses{" "}
               <a
                 href="https://fal.ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary underline underline-offset-4 hover:text-primary/80"
+                className="text-[var(--text)] underline underline-offset-4 hover:text-[var(--text-dim)]"
               >
                 fal.ai
               </a>{" "}
@@ -36,7 +36,7 @@ export function ApiKeyPrompt() {
             href="https://fal.ai/dashboard/keys"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+            className="text-[10px] text-[var(--text-dim)] underline underline-offset-4 hover:text-[var(--text)]"
           >
             Get a key from fal.ai
           </a>

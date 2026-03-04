@@ -2,10 +2,9 @@
 
 import { useTrainerStore } from "@/store/trainer-store";
 import { ROUND_CONFIGS } from "@/types";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ImageCell } from "./ImageCell";
-import { ArrowRight, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
 export function FinalReview() {
   const gridResults = useTrainerStore((s) => s.gridResults);
@@ -13,7 +12,6 @@ export function FinalReview() {
     (s) => s.toggleFinalReviewImage
   );
   const getSelectedImages = useTrainerStore((s) => s.getSelectedImages);
-  const setPhase = useTrainerStore((s) => s.setPhase);
 
   const selectedImages = getSelectedImages();
   const selectedCount = selectedImages.length;
@@ -30,23 +28,22 @@ export function FinalReview() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Final Review</h2>
-          <p className="text-sm text-muted-foreground">
-            Remove any remaining images you don't want in the training
-            set.
+          <h2 className="text-[13px] font-semibold tracking-[0.06em]">Final Review</h2>
+          <p className="text-[11px] text-[var(--text-dim)]">
+            Remove any remaining images you don't want in the training set.
           </p>
         </div>
         <Badge variant={selectedCount >= 20 ? "default" : "destructive"}>
-          {selectedCount} images selected
+          {selectedCount} images
         </Badge>
       </div>
 
       {selectedCount < 20 && (
         <div
-          className={`rounded-lg border p-3 text-sm ${
+          className={`rounded-lg border p-3 text-[11px] ${
             selectedCount < 15
-              ? "border-destructive/50 bg-destructive/10 text-red-200"
-              : "border-yellow-500/50 bg-yellow-500/10 text-yellow-200"
+              ? "border-destructive/30 bg-destructive/5 text-destructive"
+              : "border-[var(--cat-border)] bg-[var(--surface-2)] text-[var(--text-dim)]"
           }`}
         >
           <div className="flex items-center gap-2">
@@ -69,7 +66,7 @@ export function FinalReview() {
 
       {imagesByRound.map(({ config, images }) => (
         <div key={config.type} className="space-y-3">
-          <h3 className="text-sm font-medium text-muted-foreground">
+          <h3 className="text-[10px] font-semibold tracking-[0.08em] text-[var(--text-dim)]">
             {config.label} ({images.length} images)
           </h3>
           <div className="grid grid-cols-4 gap-2.5">
@@ -84,22 +81,6 @@ export function FinalReview() {
           </div>
         </div>
       ))}
-
-      <div className="flex flex-wrap gap-3">
-        <Button
-          variant="outline"
-          onClick={() => useTrainerStore.getState().setPhase("generating")}
-        >
-          Back to Rounds
-        </Button>
-        <Button
-          onClick={() => setPhase("training-config")}
-          disabled={selectedCount < 15}
-        >
-          Continue to Training
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
     </div>
   );
 }

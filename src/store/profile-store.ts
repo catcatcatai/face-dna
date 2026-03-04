@@ -27,7 +27,7 @@ export const useProfileStore = create<ProfileState>()(
       getProfile: (id) => get().profiles.find((p) => p.id === id),
     }),
     {
-      name: "onset-profiles",
+      name: "face-dna-profiles",
     }
   )
 );

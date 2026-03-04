@@ -11,8 +11,6 @@ import {
   AlertCircle,
   Copy,
   Download,
-  RotateCcw,
-  ExternalLink,
 } from "lucide-react";
 import { GridLoader } from "@/components/ui/grid-loader";
 import { toast } from "sonner";
@@ -124,7 +122,6 @@ export function TrainingStatus() {
     if (phase === "complete" && trainingResult && !savedRef.current) {
       savedRef.current = true;
 
-      // Pick two distinct round-1 images for card preview + hover
       const round1Images = getSelectedImages().filter(
         (img) => img.roundType === "expressions" && img.falUrl
       );
@@ -189,7 +186,6 @@ export function TrainingStatus() {
     toast.success(`${label} copied`);
   };
 
-  // Typewriter status messages
   const typedQuip = useTypewriter(TRAINING_QUIPS, 8000, isTraining);
   const elapsedMs = useElapsedTimer(isTraining);
 
@@ -200,14 +196,14 @@ export function TrainingStatus() {
         <div className="flex flex-col items-center gap-6 py-16">
           <GridLoader size={160} />
           <div className="text-center">
-            <h2 className="text-xl font-bold tracking-tight">Training Your LoRA</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <h2 className="text-[13px] font-semibold tracking-[0.06em]">Training Your LoRA</h2>
+            <p className="mt-2 text-[11px] text-[var(--text-dim)]" style={{ textTransform: "none" }}>
               {trainingStatus || typedQuip}
               {!trainingStatus && <span className="animate-pulse">▌</span>}
             </p>
-            <div className="mt-4 flex items-center justify-center gap-3 text-xs text-muted-foreground/70">
+            <div className="mt-4 flex items-center justify-center gap-3 text-[10px] text-[var(--text-dim)]">
               <span className="tabular-nums">{formatDuration(elapsedMs)} elapsed</span>
-              <span className="text-muted-foreground/30">·</span>
+              <span className="text-[var(--cat-border)]">·</span>
               <span>typically takes 5–10 min</span>
             </div>
           </div>
@@ -221,10 +217,10 @@ export function TrainingStatus() {
     return (
       <div className="mx-auto max-w-2xl">
         <div className="flex flex-col items-center gap-6 py-16">
-          <AlertCircle className="h-12 w-12 text-destructive" />
+          <AlertCircle className="h-10 w-10 text-destructive" />
           <div className="text-center">
-            <h2 className="text-xl font-semibold">Training Failed</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <h2 className="text-[13px] font-semibold tracking-[0.06em]">Training Failed</h2>
+            <p className="mt-2 text-[11px] text-[var(--text-dim)]" style={{ textTransform: "none" }}>
               {trainingError}
             </p>
           </div>
@@ -244,12 +240,11 @@ export function TrainingStatus() {
     return (
       <div className="mx-auto max-w-2xl space-y-6">
         <div className="flex flex-col items-center gap-4 py-8">
-          <CheckCircle2 className="h-12 w-12 text-primary" />
+          <CheckCircle2 className="h-10 w-10 text-[var(--cat-accent)]" />
           <div className="text-center">
-            <h2 className="text-2xl font-bold tracking-tight">LoRA Trained!</h2>
-            <p className="text-sm text-muted-foreground">
-              Your face LoRA is ready to use. It has been saved to your
-              profiles.
+            <h2 className="text-[13px] font-semibold tracking-[0.06em]">LoRA Trained</h2>
+            <p className="text-[11px] text-[var(--text-dim)]">
+              Your face LoRA is ready. Saved to profiles.
               {trainingDurationMs != null && (
                 <> Completed in {formatDuration(trainingDurationMs)}.</>
               )}
@@ -260,11 +255,11 @@ export function TrainingStatus() {
         <Card>
           <CardContent className="space-y-4 pt-6">
             <div className="space-y-2">
-              <p className="text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-[10px] font-semibold tracking-[0.08em] text-[var(--text-dim)]">
                 Trigger Word
               </p>
               <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="text-sm">
+                <Badge variant="secondary">
                   {trainingResult.triggerWord}
                 </Badge>
                 <Button
@@ -284,11 +279,11 @@ export function TrainingStatus() {
             </div>
 
             <div className="space-y-2">
-              <p className="text-xs font-medium uppercase text-muted-foreground">
+              <p className="text-[10px] font-semibold tracking-[0.08em] text-[var(--text-dim)]">
                 LoRA URL
               </p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 truncate rounded bg-muted px-2 py-1 text-xs">
+                <code className="flex-1 truncate rounded bg-[var(--surface-2)] px-2 py-1 text-[10px]" style={{ textTransform: "none" }}>
                   {trainingResult.loraUrl}
                 </code>
                 <Button
@@ -336,24 +331,6 @@ export function TrainingStatus() {
             </div>
           </CardContent>
         </Card>
-
-        <div className="flex flex-col items-center gap-2">
-          <a
-            href="https://fal.ai/models/fal-ai/flux-lora"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full max-w-xs"
-          >
-            <Button className="w-full">
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Test Your LoRA
-            </Button>
-          </a>
-          <Button variant="ghost" onClick={reset}>
-            <RotateCcw className="mr-2 h-4 w-4" />
-            Train Another
-          </Button>
-        </div>
       </div>
     );
   }
