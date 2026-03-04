@@ -14,7 +14,7 @@ export function ApiKeyPrompt() {
             <KeyRound className="size-6 text-[var(--text-dim)]" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-[13px] font-semibold tracking-[0.06em]">API key required</h2>
+            <h2 className="text-[15px] font-semibold tracking-[0.06em]">API key required</h2>
             <p className="text-[11px] text-[var(--text-dim)]">
               face-dna uses{" "}
               <a

@@ -11,6 +11,8 @@ import {
   AlertCircle,
   Copy,
   Download,
+  ExternalLink,
+  RotateCcw,
 } from "lucide-react";
 import { GridLoader } from "@/components/ui/grid-loader";
 import { toast } from "sonner";
@@ -196,7 +198,7 @@ export function TrainingStatus() {
         <div className="flex flex-col items-center gap-6 py-16">
           <GridLoader size={160} />
           <div className="text-center">
-            <h2 className="text-[13px] font-semibold tracking-[0.06em]">Training Your LoRA</h2>
+            <h2 className="text-[15px] font-semibold tracking-[0.06em]">Training Your LoRA</h2>
             <p className="mt-2 text-[11px] text-[var(--text-dim)]" style={{ textTransform: "none" }}>
               {trainingStatus || typedQuip}
               {!trainingStatus && <span className="animate-pulse">▌</span>}
@@ -219,7 +221,7 @@ export function TrainingStatus() {
         <div className="flex flex-col items-center gap-6 py-16">
           <AlertCircle className="h-10 w-10 text-destructive" />
           <div className="text-center">
-            <h2 className="text-[13px] font-semibold tracking-[0.06em]">Training Failed</h2>
+            <h2 className="text-[15px] font-semibold tracking-[0.06em]">Training Failed</h2>
             <p className="mt-2 text-[11px] text-[var(--text-dim)]" style={{ textTransform: "none" }}>
               {trainingError}
             </p>
@@ -242,7 +244,7 @@ export function TrainingStatus() {
         <div className="flex flex-col items-center gap-4 py-8">
           <CheckCircle2 className="h-10 w-10 text-[var(--cat-accent)]" />
           <div className="text-center">
-            <h2 className="text-[13px] font-semibold tracking-[0.06em]">LoRA Trained</h2>
+            <h2 className="text-[15px] font-semibold tracking-[0.06em]">LoRA Trained</h2>
             <p className="text-[11px] text-[var(--text-dim)]">
               Your face LoRA is ready. Saved to profiles.
               {trainingDurationMs != null && (
@@ -258,24 +260,9 @@ export function TrainingStatus() {
               <p className="text-[10px] font-semibold tracking-[0.08em] text-[var(--text-dim)]">
                 Trigger Word
               </p>
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">
-                  {trainingResult.triggerWord}
-                </Badge>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() =>
-                    copyToClipboard(
-                      trainingResult.triggerWord,
-                      "Trigger word"
-                    )
-                  }
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-              </div>
+              <Badge variant="secondary">
+                {trainingResult.triggerWord}
+              </Badge>
             </div>
 
             <div className="space-y-2">
@@ -283,18 +270,18 @@ export function TrainingStatus() {
                 LoRA URL
               </p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 truncate rounded bg-[var(--surface-2)] px-2 py-1 text-[10px]" style={{ textTransform: "none" }}>
+                <code className="flex-1 truncate rounded-lg bg-[var(--surface-2)] px-3 py-2.5 text-[10px]" style={{ textTransform: "none" }}>
                   {trainingResult.loraUrl}
                 </code>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6 flex-shrink-0"
+                  className="h-8 w-8 flex-shrink-0"
                   onClick={() =>
                     copyToClipboard(trainingResult.loraUrl, "LoRA URL")
                   }
                 >
-                  <Copy className="h-3 w-3" />
+                  <Copy className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
@@ -331,6 +318,23 @@ export function TrainingStatus() {
             </div>
           </CardContent>
         </Card>
+
+        <div className="flex items-center justify-between">
+          <Button variant="outline" onClick={reset}>
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            Train Another
+          </Button>
+          <a
+            href="https://fal.ai/models/fal-ai/flux-lora"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button>
+              <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+              Test LoRA
+            </Button>
+          </a>
+        </div>
       </div>
     );
   }

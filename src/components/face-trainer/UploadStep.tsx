@@ -104,7 +104,7 @@ export function UploadStep() {
     return (
       <div className="mx-auto max-w-2xl space-y-6">
         <div className="space-y-2">
-          <h1 className="text-[13px] font-semibold tracking-[0.06em]">
+          <h1 className="text-[15px] font-semibold tracking-[0.06em]">
             Train a Face LoRA
           </h1>
           <p className="text-[13px] text-[var(--text-dim)]">
@@ -148,7 +148,7 @@ export function UploadStep() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-[13px] font-semibold tracking-[0.06em]">
+        <h1 className="text-[15px] font-semibold tracking-[0.06em]">
           Train a Face LoRA
         </h1>
         <p className="text-[13px] text-[var(--text-dim)]">

@@ -125,7 +125,7 @@ export function GenerationRound() {
       {/* Left sidebar: round info + navigation */}
       <div className="w-[220px] shrink-0 space-y-5">
         <div className="space-y-1">
-          <h2 className="text-[13px] font-semibold tracking-[0.06em]">
+          <h2 className="text-[15px] font-semibold tracking-[0.06em]">
             {roundConfig?.label}
           </h2>
           <p className="text-[11px] text-[var(--text-dim)]">
@@ -149,11 +149,6 @@ export function GenerationRound() {
               {config.label.split(": ")[1] || config.label}
             </div>
           ))}
-        </div>
-
-        {/* Selection count */}
-        <div className="rounded-lg border border-[var(--cat-border)] bg-[var(--surface)] px-3 py-2 text-[11px]">
-          Selected: <span className="font-semibold">{totalSelected} images</span>
         </div>
 
         {/* Actions */}
@@ -218,11 +213,9 @@ export function GenerationRound() {
         {/* Grid display with inline controls */}
         {currentGrid && !isGenerating && (
           <div className="space-y-4">
-            <div className="flex items-center justify-between text-[11px] text-[var(--text-dim)]">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[var(--cat-accent)]" />
-                <span>{selectedInRound}/{totalInRound} selected — tap to deselect</span>
-              </div>
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-dim)]">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[var(--cat-accent)]" />
+              <span>{selectedInRound}/{totalInRound} selected — tap to deselect</span>
             </div>
             <ImageGrid
               images={currentGrid.croppedImages}

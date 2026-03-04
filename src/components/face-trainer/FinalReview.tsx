@@ -3,8 +3,9 @@
 import { useTrainerStore } from "@/store/trainer-store";
 import { ROUND_CONFIGS } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ImageCell } from "./ImageCell";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight } from "lucide-react";
 
 export function FinalReview() {
   const gridResults = useTrainerStore((s) => s.gridResults);
@@ -12,6 +13,8 @@ export function FinalReview() {
     (s) => s.toggleFinalReviewImage
   );
   const getSelectedImages = useTrainerStore((s) => s.getSelectedImages);
+
+  const setPhase = useTrainerStore((s) => s.setPhase);
 
   const selectedImages = getSelectedImages();
   const selectedCount = selectedImages.length;
@@ -28,7 +31,7 @@ export function FinalReview() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-[13px] font-semibold tracking-[0.06em]">Final Review</h2>
+          <h2 className="text-[15px] font-semibold tracking-[0.06em]">Final Review</h2>
           <p className="text-[11px] text-[var(--text-dim)]">
             Remove any remaining images you don't want in the training set.
           </p>
@@ -81,6 +84,20 @@ export function FinalReview() {
           </div>
         </div>
       ))}
+
+      <div className="flex items-center justify-between pt-2">
+        <Button
+          variant="outline"
+          onClick={() => setPhase("generating")}
+        >
+          <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+          Back
+        </Button>
+        <Button onClick={() => setPhase("training-config")} disabled={selectedCount < 15}>
+          Continue
+          <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+        </Button>
+      </div>
     </div>
   );
 }

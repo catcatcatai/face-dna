@@ -15,10 +15,10 @@ export function ImageCell({ imageUrl, selected, onToggle }: ImageCellProps) {
       type="button"
       onClick={onToggle}
       className={cn(
-        "group relative aspect-square overflow-hidden rounded-lg border-2 transition-all",
+        "group relative aspect-square overflow-hidden rounded-lg transition-all",
         selected
-          ? "border-primary"
-          : "border-transparent opacity-50 grayscale-[80%]"
+          ? ""
+          : "opacity-50 grayscale-[80%]"
       )}
     >
       <img

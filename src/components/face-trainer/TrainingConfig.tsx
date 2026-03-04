@@ -4,9 +4,10 @@ import { useRef } from "react";
 import { useTrainerStore } from "@/store/trainer-store";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, ArrowLeft, Sparkles } from "lucide-react";
 
 export function TrainingConfig() {
   const profileName = useTrainerStore((s) => s.profileName);
@@ -15,6 +16,8 @@ export function TrainingConfig() {
   const setTriggerWord = useTrainerStore((s) => s.setTriggerWord);
   const getSelectedCount = useTrainerStore((s) => s.getSelectedCount);
   const trainingError = useTrainerStore((s) => s.trainingError);
+  const startTraining = useTrainerStore((s) => s.startTraining);
+  const setPhase = useTrainerStore((s) => s.setPhase);
 
   const triggerManuallyEdited = useRef(false);
   const selectedCount = getSelectedCount();
@@ -34,7 +37,7 @@ export function TrainingConfig() {
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <div>
-        <h2 className="text-[13px] font-semibold tracking-[0.06em]">Configure Training</h2>
+        <h2 className="text-[15px] font-semibold tracking-[0.06em]">Configure Training</h2>
         <p className="text-[11px] text-[var(--text-dim)]">
           Set a name and trigger word for your LoRA, then start training.
         </p>
@@ -94,6 +97,20 @@ export function TrainingConfig() {
         Training typically takes 4-8 minutes and costs ~$2. The model will
         auto-caption your images and create face masks for optimal training.
       </p>
+
+      <div className="flex items-center justify-between pt-2">
+        <Button variant="outline" onClick={() => setPhase("review")}>
+          <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+          Back
+        </Button>
+        <Button
+          onClick={startTraining}
+          disabled={!profileName.trim() || !triggerWord.trim()}
+        >
+          <Sparkles className="mr-1.5 h-3.5 w-3.5" />
+          Start Training
+        </Button>
+      </div>
     </div>
   );
 }

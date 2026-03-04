@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { IBM_Plex_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { FloatingToolbar } from "@/components/layout/FloatingToolbar";
 import { FalConfigProvider } from "@/components/providers/FalConfigProvider";
 import "./globals.css";
 
@@ -27,8 +26,7 @@ export default function RootLayout({
       <body className={`${ibmPlexMono.variable} antialiased`}>
         <FalConfigProvider>
           <SiteHeader />
-          <main className="mx-auto max-w-5xl px-4 pt-14 pb-24">{children}</main>
-          <FloatingToolbar />
+          <main className="mx-auto max-w-5xl px-4 pt-14 pb-12">{children}</main>
         </FalConfigProvider>
         <Toaster />
       </body>
